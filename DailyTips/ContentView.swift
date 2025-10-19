@@ -6,50 +6,44 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @StateObject private var vm = TipViewModel()
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
+        NavigationStack {
+            Form {
+                Section("Bill") {
+                    TextField("Amount", text: $vm.billAmount)
+                        .keyboardType(.decimalPad)
                 }
-                .onDelete(perform: deleteItems)
+
+                Section("Tip") {
+                    Picker("Percent", selection: $vm.tipPercent) {
+                        ForEach([0,5,10,12,15,18,20,25,30], id: \.self) { p in
+                            Text("\(p)%").tag(p)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+
+                    Toggle("Round up total", isOn: $vm.roundUp)
+                }
+
+                Section("Split") {
+                    Stepper("People: \(vm.partySize)", value: $vm.partySize, in: 1...20)
+                }
+
+                Section("Results") {
+                    HStack { Text("Tip"); Spacer(); Text(vm.money(vm.tipAmount)) }
+                    HStack { Text("Total"); Spacer(); Text(vm.money(vm.total)).bold() }
+                    HStack { Text("Per person"); Spacer(); Text(vm.money(vm.perPerson)) }
+                }
             }
+            .navigationTitle("DailyTips")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Reset") { vm.reset() }
                 }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
             }
         }
     }
@@ -57,5 +51,4 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }
