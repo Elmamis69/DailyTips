@@ -1,54 +1,66 @@
-//
-//  ContentView.swift
-//  DailyTips
-//
-//  Created by Adrian Felix on 19/10/25.
-//
-
 import SwiftUI
+import UIKit  // para haptics
 
 struct ContentView: View {
     @StateObject private var vm = TipViewModel()
+    @FocusState private var amountFocused: Bool
 
     var body: some View {
         NavigationStack {
             Form {
+                // BILL
                 Section("Bill") {
-                    TextField("Amount", text: $vm.billAmount)
+                    TextField("Enter amount", text: $vm.billAmount)
                         .keyboardType(.decimalPad)
+                        .focused($amountFocused)
+                        .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button("Done") { amountFocused = false }
+                            }
+                        }
                 }
 
+                // TIP
                 Section("Tip") {
-                    Picker("Percent", selection: $vm.tipPercent) {
-                        ForEach([0,5,10,12,15,18,20,25,30], id: \.self) { p in
-                            Text("\(p)%").tag(p)
+                    // presets
+                    HStack {
+                        ForEach([10, 15, 20], id: \.self) { p in
+                            Button("\(p)%") {
+                                vm.tipPercent = p
+                                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                            }
+                            .buttonStyle(.bordered)
+                            .tint(vm.tipPercent == p ? .accentColor : .secondary)
                         }
                     }
-                    .pickerStyle(.segmented)
 
+                    Stepper("Tip: \(vm.tipPercent)%", value: $vm.tipPercent, in: 0...50)
+                    Stepper("People: \(vm.partySize)", value: $vm.partySize, in: 1...20)
                     Toggle("Round up total", isOn: $vm.roundUp)
                 }
 
-                Section("Split") {
-                    Stepper("People: \(vm.partySize)", value: $vm.partySize, in: 1...20)
-                }
-
-                Section("Results") {
-                    HStack { Text("Tip"); Spacer(); Text(vm.money(vm.tipAmount)) }
-                    HStack { Text("Total"); Spacer(); Text(vm.money(vm.total)).bold() }
-                    HStack { Text("Per person"); Spacer(); Text(vm.money(vm.perPerson)) }
+                // RESULT
+                Section("Result") {
+                    valueRow(title: "Total:", value: vm.total, currency: vm.currencyCode)
+                    valueRow(title: "Per person:", value: vm.perPerson, currency: vm.currencyCode)
                 }
             }
-            .navigationTitle("DailyTips")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Reset") { vm.reset() }
-                }
-            }
+            .navigationTitle("💵 DailyTips")
         }
+    }
+
+    @ViewBuilder
+    private func valueRow(title: String, value: Double, currency: String) -> some View {
+        HStack {
+            Text(title)
+            Spacer()
+            Text(value, format: .currency(code: currency))
+                .monospacedDigit()
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(title) \(value, format: .currency(code: currency))")
     }
 }
 
-#Preview {
-    ContentView()
-}
+#Preview { ContentView() }

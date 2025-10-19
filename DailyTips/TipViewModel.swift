@@ -16,7 +16,7 @@ final class TipViewModel: ObservableObject {
     @Published var roundUp: Bool = false
 
     // Helpers
-    private var currencyCode: String {
+    var currencyCode: String {
         Locale.current.currency?.identifier ?? "USD"
     }
 
