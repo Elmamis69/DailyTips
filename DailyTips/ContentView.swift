@@ -5,6 +5,10 @@ struct ContentView: View {
     @StateObject private var vm = TipViewModel()
     @FocusState private var amountFocused: Bool
 
+    // MARK: - Preferencias persistentes
+    @AppStorage("prefs.tipPercent") private var tipPref: Int = 10
+    @AppStorage("prefs.roundUp") private var roundPref: Bool = false
+
     var body: some View {
         NavigationStack {
             Form {
@@ -47,6 +51,19 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("💵 DailyTips")
+            .onAppear {
+                // Cuando la vista se muestra, cargamos los valores guardados
+                vm.tipPercent = tipPref
+                vm.roundUp = roundPref
+            }
+            .onChange(of: vm.tipPercent) { _, new in
+                // Cada vez que cambia el porcentaje de propina, lo guardamos
+                tipPref = new
+            }
+            .onChange(of: vm.roundUp) { _, new in
+                // Cada vez que cambia el switch de redondeo, lo guardamos
+                roundPref = new
+            }
         }
     }
 
@@ -61,6 +78,13 @@ struct ContentView: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(title) \(value, format: .currency(code: currency))")
     }
+    
+    // Persistencia simple de preferencias
+    private enum Prefs {
+        static let tip = "prefs.tipPercent"
+        static let round = "prefs.roundUp"
+    }
+
 }
 
 #Preview { ContentView() }
