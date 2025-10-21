@@ -39,8 +39,8 @@ DailyTips/
 | Phase | Goal | Status |
 |-------|------|--------|
 | **1. Base UI + Logic** | Build a functional calculator using SwiftUI + Combine. | ✅ Completed |
-| **2. Improved UX** | Add tip presets (10%, 15%, 20%) and haptic feedback. | ⏳ Planned |
-| **3. Data Persistence** | Save last tip settings with `AppStorage`. | ⏳ Planned |
+| **2. Improved UX** | Add tip presets (10%, 15%, 20%) and haptic feedback. | ✅ Completed |
+| **3. Data Persistence** | Save last tip settings with `AppStorage`. | ✅ Completed |
 | **4. Visual Polish** | Add custom colors, icons, and adaptive layout. | ⏳ Planned |
 | **5. Testing & Refactor** | Write unit tests for ViewModel and improve architecture. | 🔜 Upcoming |
 | **6. App Store Demo** | Package the app for TestFlight or personal distribution. | 🔜 Upcoming |
