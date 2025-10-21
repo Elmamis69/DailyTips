@@ -1,9 +1,12 @@
 import SwiftUI
 import UIKit  // para haptics
+import SwiftData
 
 struct ContentView: View {
     @StateObject private var vm = TipViewModel()
     @FocusState private var amountFocused: Bool
+    
+    @Environment(\.modelContext) private var modelContext 
 
     // MARK: - Preferencias persistentes
     @AppStorage("prefs.tipPercent") private var tipPref: Int = 10
@@ -48,6 +51,12 @@ struct ContentView: View {
                 Section("Result") {
                     valueRow(title: "Total:", value: vm.total, currency: vm.currencyCode)
                     valueRow(title: "Per person:", value: vm.perPerson, currency: vm.currencyCode)
+                    
+                    Button("💾 Save Tip") {
+                        vm.saveEntry(using: modelContext)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .frame(maxWidth: .infinity, alignment: .center)
                 }
             }
             .navigationTitle("💵 DailyTips")

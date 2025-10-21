@@ -27,6 +27,6 @@ struct DailyTipsApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(for: TipEntry.self)
     }
 }

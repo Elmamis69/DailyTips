@@ -6,6 +6,7 @@
 //
 import Foundation
 import Combine
+import SwiftData
 
 @MainActor
 final class TipViewModel: ObservableObject {
@@ -52,5 +53,13 @@ final class TipViewModel: ObservableObject {
         partySize = 1
         roundUp = false
     }
+    
+    // MARK: - Save entry
+        func saveEntry(using context: ModelContext) {
+            guard bill > 0 else { return }
+            let entry = TipEntry(amount: total, tipPercent: tipPercent)
+            context.insert(entry)
+            try? context.save()
+        }
 }
 
