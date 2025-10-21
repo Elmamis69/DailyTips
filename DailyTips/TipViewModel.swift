@@ -61,5 +61,23 @@ final class TipViewModel: ObservableObject {
             context.insert(entry)
             try? context.save()
         }
+    // Normaliza el input del monto
+    func normalizeAmountInput(_ newValue: String) {
+        let filtered = newValue.filter { $0.isNumber || $0 == "." }
+        var result = ""
+        var seenDot = false
+        for ch in filtered {
+            if ch == "." {
+                if seenDot { continue }
+                seenDot = true
+            }
+            result.append(ch)
+        }
+        if result.hasPrefix("0"), !result.hasPrefix("0.") {
+            result = String(result.drop(while: { $0 == "0" }))
+            if result.isEmpty { result = "0" }
+        }
+        billAmount = result
+    }
 }
 
