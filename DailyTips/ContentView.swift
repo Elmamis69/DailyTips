@@ -60,6 +60,13 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("💵 DailyTips")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink(destination: HistoryView()) {
+                        Label("History", systemImage: "clock.arrow.circlepath")
+                    }
+                }
+            }
             .onAppear {
                 // Cuando la vista se muestra, cargamos los valores guardados
                 vm.tipPercent = tipPref
