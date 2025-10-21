@@ -35,6 +35,7 @@ struct ContentView: View {
             }
             .navigationTitle("💵 DailyTips")
             .toolbar { historyToolbar }
+            .tint(Color("Brand"))
             .onAppear {
                 vm.tipPercent = tipPref
                 vm.roundUp = roundPref
@@ -103,6 +104,7 @@ struct ContentView: View {
                 showSavedAlert = true
             }
             .buttonStyle(.borderedProminent)
+            .tint(Color("Brand"))
             .frame(maxWidth: .infinity, alignment: .center)
             .disabled(vm.total == 0)
         }
