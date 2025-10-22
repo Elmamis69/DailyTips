@@ -42,16 +42,16 @@ DailyTips/
 | **2. Improved UX** | Add tip presets (10%, 15%, 20%) and haptic feedback. | ✅ Completed |
 | **3. Data Persistence** | Save last tip settings with `AppStorage`. | ✅ Completed |
 | **4. Visual Polish** | Add custom colors, icons, and adaptive layout. | ✅ Completed |
-| **5. Testing & Refactor** | Write unit tests for ViewModel and improve architecture. | 🔜 Upcoming |
-| **6. App Store Demo** | Package the app for TestFlight or personal distribution. | 🔜 Upcoming |
+| **5. Testing & Refactor** | Write unit tests for ViewModel and improve architecture. | ⚠️ Optional (Skipped) |
+| **6. App Store Demo** | Package the app for TestFlight or personal distribution. | ⏩ Skipped (not needed) |
 
 ---
 
 ## 🧩 Next Steps
-- [ ] Add presets for tip percentages  
-- [ ] Implement haptic feedback when rounding total  
-- [ ] Store last used values using `AppStorage`  
-- [ ] Improve color scheme and typography  
+- [x] Add presets for tip percentages  
+- [x] Implement haptic feedback when rounding total  
+- [x] Store last used values using `AppStorage`  
+- [x] Improve color scheme and typography  
 - [ ] Write snapshot/UI tests
 
 ---

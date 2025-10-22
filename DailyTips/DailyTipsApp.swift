@@ -1,32 +1,31 @@
-//
-//  DailyTipsApp.swift
-//  DailyTips
-//
-//  Created by Adrian Felix on 19/10/25.
-//
-
 import SwiftUI
 import SwiftData
 
 @main
 struct DailyTipsApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: TipEntry.self)
+        .modelContainer(sharedContainer) // usamos el contenedor seguro de abajo
     }
 }
+
+private let sharedContainer: ModelContainer = {
+    let isRunningTests = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+    let schema = Schema([TipEntry.self])
+
+    // Intenta crear contenedor (en memoria si estamos en tests)
+    do {
+        let config = ModelConfiguration(schema: schema,
+                                        isStoredInMemoryOnly: isRunningTests)
+        return try ModelContainer(for: schema, configurations: [config])
+    } catch {
+        // Fallback ultra-seguro si algo falla: fuerza memoria
+        assertionFailure("SwiftData container failed: \(error.localizedDescription)")
+        return try! ModelContainer(
+            for: schema,
+            configurations: [ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)]
+        )
+    }
+}()
