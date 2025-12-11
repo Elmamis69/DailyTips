@@ -56,8 +56,21 @@ DailyTips/
 
 ---
 
-## 🚀 How to Run
+## Author
+Adrián Félix
+
+Software Engineering
+
+Passionate about Android Developer, Full Stack and iOS development and clean architecture.
+
+GitHub: @Elmamis69
+Email: guerofelix234@gmail.com
+
+**License**
+This project is licensed under the MIT License.
+
+## Getting Started
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Elmamis69/DailyTips.git
+   https://github.com/Elmamis69/DailyTips.git
 
